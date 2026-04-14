@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arthur Dacorregio Silva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+/* ══════════════════════════════════
+   THEME
+══════════════════════════════════ */
+:root {
+  --bg:       #000;
+  --bg-1:     #0a0a0a;
+  --line:     #1c1c1c;
+  --line-mid: #2a2a2a;
+  --text:     #ededed;
+  --text-2:   #888;
+  --text-3:   #444;
+  --white:    #fff;
+  --mono:     'DM Mono', monospace;
+  --sans:     'Sora', sans-serif;
+  --page-w:   740px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════
+   TOPBAR
+══════════════════════════════════ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  height: 52px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 2.5rem;
+  opacity: 0; animation: fadeDown 0.6s ease 0.8s forwards;
+}
+@keyframes fadeDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+.topbar-logo { font-family: var(--mono); font-size: 0.72rem; color: var(--white); letter-spacing: 0.04em; }
+.topbar-nav  { display: flex; gap: 2rem; list-style: none; }
+.topbar-nav a {
+  font-size: 0.72rem; font-family: var(--mono); color: var(--text-2);
+  text-decoration: none; letter-spacing: 0.06em; transition: color 0.15s;
+}
+.topbar-nav a:hover, .topbar-nav a.active { color: var(--white); }
+.topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+.lang-switch {
+  display: flex; align-items: center;
+  border: 1px solid var(--line-mid); border-radius: 4px; overflow: hidden;
+}
+.lang-switch button {
+  background: transparent; border: none; cursor: pointer;
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em;
+  color: var(--text-3); padding: 0.28rem 0.6rem; transition: background 0.15s, color 0.15s;
+}
+.lang-switch button:first-child { border-right: 1px solid var(--line-mid); }
+.lang-switch button.active { background: var(--white); color: #000; }
+.lang-switch button:not(.active):hover { color: var(--text-2); background: var(--bg-1); }
+
+.topbar-btn {
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em;
+  color: #000; background: var(--white); border: none;
+  padding: 0.35rem 0.85rem; border-radius: 4px;
+  text-decoration: none; transition: opacity 0.15s;
+}
+.topbar-btn:hover { opacity: 0.85; }
+
+/* ══════════════════════════════════
+   PAGE LAYOUT
+══════════════════════════════════ */
+.page { max-width: var(--page-w); margin: 0 auto; padding: 7rem 2rem 6rem; }
+hr { border: none; border-top: 1px solid var(--line); margin: 3.5rem 0; }
+
+/* ══════════════════════════════════
+   ANIMATION 5 — DOT GRID HERO BG
+══════════════════════════════════ */
+.hero {
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -3rem -2rem 0 -2rem;
+  background-image: radial-gradient(circle, #2a2a2a 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 100% at 100% 0%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 100% 0%, black 0%, transparent 70%);
+  opacity: 0;
+  animation: gridFadeIn 1.4s ease 0.4s forwards;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes gridFadeIn { from { opacity:0; } to { opacity:1; } }
+.hero > * { position: relative; z-index: 1; }
+
+/* ══════════════════════════════════
+   ANIMATION 1+2 — HERO NAME SPLIT + CURSOR
+══════════════════════════════════ */
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 0.7rem; color: var(--text-3);
+  letter-spacing: 0.12em; margin-bottom: 1.25rem;
+  opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards;
+}
+
+.hero-name {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 700; letter-spacing: -0.035em;
+  line-height: 1.05; color: var(--white);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.name-line { display: block; overflow: hidden; }
+
+.name-word-a {
+  display: inline-block;
+  opacity: 0; transform: translateX(-40px);
+  animation: slideFromLeft 0.7s cubic-bezier(0.22,1,0.36,1) 0.35s forwards;
+}
+.name-word-b {
+  display: inline-block;
+  opacity: 0; transform: translateX(40px);
+  animation: slideFromRight 0.7s cubic-bezier(0.22,1,0.36,1) 0.5s forwards;
+}
+
+@keyframes slideFromLeft  { to { opacity:1; transform:translateX(0); } }
+@keyframes slideFromRight { to { opacity:1; transform:translateX(0); } }
+
+/* Blinking cursor — appears after name lands */
+.cursor {
+  display: inline-block;
+  width: 3px; height: 0.85em;
+  background: var(--white);
+  margin-left: 4px;
+  vertical-align: middle;
+  opacity: 0;
+  animation: cursorAppear 0.1s ease 1.1s forwards, cursorBlink 1s step-end 1.2s infinite;
+}
+@keyframes cursorAppear { to { opacity:1; } }
+@keyframes cursorBlink  { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+.hero-tagline {
+  font-size: 1rem; font-weight: 300; color: var(--text-2);
+  max-width: 520px; line-height: 1.8; margin-bottom: 2.25rem;
+  opacity: 0; animation: fadeUp 0.5s ease 0.75s forwards;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.25rem;
+  opacity: 0; animation: fadeUp 0.5s ease 0.9s forwards;
+}
+.pill {
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.06em;
+  color: var(--text-2); border: 1px solid var(--line-mid);
+  padding: 0.25rem 0.7rem; border-radius: 3px;
+}
+.hero-links {
+  display: flex; flex-wrap: wrap; gap: 0.75rem;
+  opacity: 0; animation: fadeUp 0.5s ease 1.05s forwards;
+}
+
+.link-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em;
+  padding: 0.5rem 1rem; border-radius: 4px;
+  text-decoration: none; transition: all 0.15s;
+}
+.link-primary { background: var(--white); color: #000; border: 1px solid var(--white); }
+.link-primary:hover { background: transparent; color: var(--white); }
+.link-ghost   { background: transparent; color: var(--text-2); border: 1px solid var(--line-mid); }
+.link-ghost:hover { border-color: var(--text-2); color: var(--text); }
+
+/* ══════════════════════════════════
+   ANIMATION 3 — TYPEWRITER LABELS
+   (triggered by IntersectionObserver)
+══════════════════════════════════ */
+.label {
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--text-3);
+  margin-bottom: 1.75rem;
+  display: inline-flex; align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.label::after {
+  content: '';
+  display: inline-block;
+  width: 2px; height: 0.75em;
+  background: var(--text-3);
+  margin-left: 3px;
+  opacity: 0;
+  vertical-align: middle;
+}
+.label.typing::after { animation: cursorBlink 0.6s step-end infinite; }
+
+/* ══════════════════════════════════
+   ANIMATION 4 — SKILL TAGS CASCADE
+══════════════════════════════════ */
+.skill-item {
+  display: inline-block; color: var(--text); font-weight: 400;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.skill-item.visible { opacity: 1; transform: translateY(0); }
+.skill-item::after { content: ' ·'; color: var(--text-3); margin: 0 0.35rem; }
+.skill-item:last-child::after { content: ''; }
+
+/* ══════════════════════════════════
+   SCROLL REVEAL — sections
+══════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Stagger child rows inside a timeline/proj-list */
+.stagger-children > * {
+  opacity: 0; transform: translateX(-12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.stagger-children.visible > *:nth-child(1) { transition-delay: 0.00s; }
+.stagger-children.visible > *:nth-child(2) { transition-delay: 0.08s; }
+.stagger-children.visible > *:nth-child(3) { transition-delay: 0.16s; }
+.stagger-children.visible > *:nth-child(4) { transition-delay: 0.24s; }
+.stagger-children.visible > *:nth-child(5) { transition-delay: 0.32s; }
+.stagger-children.visible > *:nth-child(6) { transition-delay: 0.40s; }
+.stagger-children.visible > * { opacity: 1; transform: translateX(0); }
+
+/* ══════════════════════════════════
+   SCROLL PROGRESS BAR
+══════════════════════════════════ */
+.progress-bar {
+  position: fixed; top: 0; left: 0; z-index: 200;
+  height: 1px; width: 0%;
+  background: var(--white);
+  transition: width 0.1s linear;
+}
+
+/* ══════════════════════════════════
+   COMMON COMPONENTS
+══════════════════════════════════ */
+.skills-table { width: 100%; border-collapse: collapse; }
+.skills-table tr { border-bottom: 1px solid var(--line); }
+.skills-table tr:last-child { border-bottom: none; }
+.skills-table td { padding: 0.85rem 0; vertical-align: top; font-size: 0.88rem; }
+.skills-table td:first-child {
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em;
+  color: var(--text-3); text-transform: uppercase;
+  width: 140px; padding-right: 1.5rem; padding-top: 1rem;
+}
+
+.timeline { display: flex; flex-direction: column; }
+.tl-row {
+  display: grid; grid-template-columns: 130px 1fr; gap: 0 2.5rem;
+  padding: 1.5rem 0; border-bottom: 1px solid var(--line);
+}
+.tl-row:first-child { border-top: 1px solid var(--line); }
+.tl-date  { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text-3); line-height: 1.6; padding-top: 0.15rem; }
+.tl-title { font-size: 0.93rem; font-weight: 500; color: var(--white); margin-bottom: 0.2rem; }
+.tl-org   { font-family: var(--mono); font-size: 0.65rem; color: var(--text-3); letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+.tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+.tl-bullets li { font-size: 0.84rem; color: var(--text-2); font-weight: 300; padding-left: 1rem; position: relative; line-height: 1.65; }
+.tl-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--text-3); font-size: 0.75rem; }
+.tl-note { font-size: 0.84rem; color: var(--text-2); font-weight: 300; }
+
+.proj-list { display: flex; flex-direction: column; }
+.proj-row {
+  display: grid; grid-template-columns: 1fr auto; align-items: start;
+  gap: 1rem 2rem; padding: 1.25rem 0; border-bottom: 1px solid var(--line);
+  transition: background 0.15s, padding-left 0.15s;
+  cursor: default;
+}
+.proj-row:first-child { border-top: 1px solid var(--line); }
+.proj-row:hover { background: var(--bg-1); padding-left: 0.5rem; }
+.proj-title { font-size: 0.93rem; font-weight: 500; color: var(--white); margin-bottom: 0.3rem; }
+.proj-desc  { font-size: 0.82rem; color: var(--text-2); font-weight: 300; line-height: 1.65; max-width: 480px; }
+.proj-stack { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: flex-start; justify-content: flex-end; margin-top: 0.15rem; }
+.stack-tag  { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.05em; color: var(--text-3); border: 1px solid var(--line); padding: 0.15rem 0.5rem; border-radius: 2px; }
+
+.lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+.lang-row  { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 0; border-bottom: 1px solid var(--line); gap: 1rem; }
+.lang-row:nth-child(odd)  { padding-right: 2.5rem; border-right: 1px solid var(--line); }
+.lang-row:nth-child(even) { padding-left: 2.5rem; }
+.lang-grid .lang-row:nth-last-child(-n+2) { border-bottom: none; }
+.lang-name  { font-size: 0.88rem; font-weight: 400; color: var(--text); }
+.lang-level { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; color: var(--text-3); white-space: nowrap; }
+
+.contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+.contact-item {
+  display: flex; flex-direction: column; gap: 0.2rem;
+  padding: 1rem 0; border-bottom: 1px solid var(--line);
+  text-decoration: none; transition: background 0.12s, padding-left 0.12s;
+}
+.contact-item:hover { background: var(--bg-1); }
+.contact-item:nth-child(odd)  { padding-right: 2.5rem; border-right: 1px solid var(--line); }
+.contact-item:nth-child(even) { padding-left: 2.5rem; }
+.contact-item:nth-child(odd):hover  { padding-left: 0.5rem; }
+.contact-item:nth-child(even):hover { padding-left: 2.8rem; }
+.contact-grid .contact-item:nth-last-child(-n+2) { border-bottom: none; }
+.contact-type { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; color: var(--text-3); text-transform: uppercase; }
+.contact-val  { font-size: 0.85rem; color: var(--text); font-weight: 300; }
+
+.download-block {
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  padding: 2rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); flex-wrap: wrap;
+}
+.download-block h3 { font-size: 1rem; font-weight: 500; color: var(--white); }
+.download-block p  { font-size: 0.82rem; color: var(--text-2); font-weight: 300; margin-top: 0.2rem; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .topbar-nav { display: none; }
+  .page { padding: 5.5rem 1.25rem 4rem; }
+  .tl-row { grid-template-columns: 1fr; gap: 0.2rem; }
+  .tl-date { margin-bottom: 0.4rem; }
+  .proj-row { grid-template-columns: 1fr; }
+  .proj-stack { justify-content: flex-start; margin-top: 0.5rem; }
+  .lang-grid, .contact-grid { grid-template-columns: 1fr; }
+  .lang-row, .contact-item { border-right: none !important; padding-right: 0 !important; padding-left: 0 !important; }
+  .lang-grid .lang-row:nth-last-child(-n+2),
+  .contact-grid .contact-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .lang-grid .lang-row:last-child,
+  .contact-grid .contact-item:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ══════════ TOPBAR ══════════ -->
+<header class="topbar">
+  <span class="topbar-logo">ADS</span>
+  <nav>
+    <ul class="topbar-nav">
+      <li><a href="#skills"     data-en="Skills"      data-pt="Habilidades">Skills</a></li>
+      <li><a href="#experience" data-en="Experience"  data-pt="Experiência">Experience</a></li>
+      <li><a href="#projects"   data-en="Projects"    data-pt="Projetos">Projects</a></li>
+      <li><a href="#education"  data-en="Education"   data-pt="Educação">Education</a></li>
+      <li><a href="#contact"    data-en="Contact"     data-pt="Contato">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="topbar-right">
+    <div class="lang-switch">
+      <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+      <button id="btn-pt"               onclick="setLang('pt')">PT</button>
+    </div>
+    <a class="topbar-btn" href="#download" data-en="Download CV" data-pt="Baixar CV">Download CV</a>
+  </div>
+</header>
+
+
+<!-- ══════════ PAGE ══════════ -->
+<main class="page">
+
+  <!-- HERO ─────────────────────────── -->
+  <section id="about" class="hero">
+    <p class="hero-eyebrow"
+       data-en="Junior Developer — Brazil / Europe"
+       data-pt="Desenvolvedor Júnior — Brasil / Europa">
+      Junior Developer — Brazil / Europe
+    </p>
+
+    <h1 class="hero-name">
+      <span class="name-line">
+        <span class="name-word-a">Arthur</span>
+      </span>
+      <span class="name-line">
+        <span class="name-word-b">Dacorregio Silva</span><span class="cursor"></span>
+      </span>
+    </h1>
+
+    <p class="hero-tagline"
+       data-en="Junior Developer with hands-on experience in Python, Java and JavaScript — backed by a teaching background that sharpens technical communication and problem-solving."
+       data-pt="Desenvolvedor Júnior com experiência prática em Python, Java e JavaScript — formação em ensino que aprimora comunicação técnica e resolução de problemas.">
+      Junior Developer with hands-on experience in Python, Java and JavaScript — backed by a teaching background that sharpens technical communication and problem-solving.
+    </p>
+
+    <div class="hero-meta">
+      <span class="pill" data-en="EU Citizen · Luxembourg"       data-pt="Cidadão da UE · Luxemburgo">EU Citizen · Luxembourg</span>
+      <span class="pill" data-en="Relocating → Netherlands 2026" data-pt="Mudança → Holanda 2026">Relocating → Netherlands 2026</span>
+      <span class="pill" data-en="Full EU Work Authorization"    data-pt="Autorização Total de Trabalho na UE">Full EU Work Authorization</span>
+    </div>
+
+    <div class="hero-links">
+      <a href="#download" class="link-btn link-primary" data-en="Download CV ↓" data-pt="Baixar CV ↓">Download CV ↓</a>
+      <a href="https://github.com/tutuba48" target="_blank" class="link-btn link-ghost">GitHub ↗</a>
+      <a href="https://linkedin.com/in/arthur-dacorregio-silva" target="_blank" class="link-btn link-ghost">LinkedIn ↗</a>
+    </div>
+  </section>
+
+  <hr class="reveal"/>
+
+  <!-- SKILLS ───────────────────────── -->
+  <section id="skills" class="reveal">
+    <p class="label" data-en="Skills" data-pt="Habilidades">Skills</p>
+    <table class="skills-table">
+      <tr>
+        <td data-en="Languages"   data-pt="Linguagens">Languages</td>
+        <td>
+          <span class="skill-item">Python</span>
+          <span class="skill-item">JavaScript</span>
+          <span class="skill-item">Java</span>
+          <span class="skill-item">C</span>
+        </td>
+      </tr>
+      <tr>
+        <td data-en="Tools & VCS" data-pt="Ferramentas & VCS">Tools & VCS</td>
+        <td>
+          <span class="skill-item">Git</span>
+          <span class="skill-item">GitHub</span>
+          <span class="skill-item">VS Code</span>
+          <span class="skill-item">MacOS</span>
+        </td>
+      </tr>
+      <tr>
+        <td data-en="Productivity" data-pt="Produtividade">Productivity</td>
+        <td>
+          <span class="skill-item">Google Workspace</span>
+          <span class="skill-item">Excel</span>
+          <span class="skill-item">Word</span>
+        </td>
+      </tr>
+      <tr>
+        <td data-en="Soft Skills" data-pt="Soft Skills">Soft Skills</td>
+        <td>
+          <span class="skill-item" data-en="Technical Communication" data-pt="Comunicação Técnica">Technical Communication</span>
+          <span class="skill-item" data-en="Curriculum Design"       data-pt="Design Curricular">Curriculum Design</span>
+          <span class="skill-item" data-en="Team Collaboration"      data-pt="Colaboração em Equipe">Team Collaboration</span>
+        </td>
+      </tr>
+    </table>
+  </section>
+
+  <hr class="reveal"/>
+
+  <!-- EXPERIENCE ───────────────────── -->
+  <section id="experience" class="reveal">
+    <p class="label" data-en="Experience" data-pt="Experiência">Experience</p>
+    <div class="timeline stagger-children">
+
+      <div class="tl-row">
+        <div class="tl-date">2023 – 2025</div>
+        <div>
+          <div class="tl-title" data-en="Private Tutor — Python & JavaScript" data-pt="Tutor Particular — Python & JavaScript">Private Tutor — Python & JavaScript</div>
+          <div class="tl-org"   data-en="Self-employed"                        data-pt="Autônomo">Self-employed</div>
+          <ul class="tl-bullets">
+            <li data-en="One-on-one and small-group sessions in Python, JavaScript, algorithms and project-based exercises for 20+ students."
+                data-pt="Aulas individuais e em grupo de Python, JavaScript, algoritmos e exercícios práticos para mais de 20 alunos.">One-on-one and small-group sessions in Python, JavaScript, algorithms and project-based exercises for 20+ students.</li>
+            <li data-en="Designed custom lesson plans and progress assessments tailored to each student."
+                data-pt="Desenvolveu planos de aula personalizados e avaliações de progresso adaptados a cada aluno.">Designed custom lesson plans and progress assessments tailored to each student.</li>
+            <li data-en="Introduced students to Git and real-world development workflows."
+                data-pt="Introduziu alunos ao Git e fluxos de trabalho reais de desenvolvimento.">Introduced students to Git and real-world development workflows.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-date">2024</div>
+        <div>
+          <div class="tl-title" data-en="Programming Teacher"    data-pt="Professor de Programação">Programming Teacher</div>
+          <div class="tl-org"   data-en="Gaia Course & College"  data-pt="Gaia Course & College">Gaia Course & College</div>
+          <ul class="tl-bullets">
+            <li data-en="Developed and launched a full Python curriculum for 30+ students (10th & 11th grade), covering fundamentals, algorithms and practical projects."
+                data-pt="Desenvolveu e lançou currículo completo de Python para mais de 30 alunos (1° e 2° ano), cobrindo fundamentos, algoritmos e projetos práticos.">Developed and launched a full Python curriculum for 30+ students (10th & 11th grade), covering fundamentals, algorithms and practical projects.</li>
+            <li data-en="Created structured lesson plans — contributing to a personal GPA of 9.0/10."
+                data-pt="Criou planos de aula estruturados — contribuindo para um GPA pessoal de 9.0/10.">Created structured lesson plans — contributing to a personal GPA of 9.0/10.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-date">2023 – 2024</div>
+        <div>
+          <div class="tl-title" data-en="School Events Coordinator"  data-pt="Coordenador de Eventos Escolares">School Events Coordinator</div>
+          <div class="tl-org"   data-en="Gaia Course & College"       data-pt="Gaia Course & College">Gaia Course & College</div>
+          <ul class="tl-bullets">
+            <li data-en="Planned and executed the school's annual events for two consecutive years, managing logistics, scheduling and cross-team communication."
+                data-pt="Planejou e executou os eventos anuais da escola por dois anos consecutivos, gerenciando logística, cronograma e comunicação entre equipes.">Planned and executed the school's annual events for two consecutive years, managing logistics, scheduling and cross-team communication.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="reveal"/>
+
+  <!-- PROJECTS ─────────────────────── -->
+  <section id="projects" class="reveal">
+    <p class="label" data-en="Projects" data-pt="Projetos">Projects</p>
+    <div class="proj-list stagger-children">
+
+      <div class="proj-row">
+        <div>
+          <div class="proj-title">Inventory Control System</div>
+          <div class="proj-desc"
+               data-en="Full desktop inventory management system with CRUD operations, stock tracking, low-stock alerts and reporting. Designed the data model and architecture independently using OOP principles."
+               data-pt="Sistema completo de gerenciamento de estoque com operações CRUD, rastreamento de estoque, alertas e relatórios. Modelo de dados e arquitetura projetados de forma independente com POO.">
+            Full desktop inventory management system with CRUD operations, stock tracking, low-stock alerts and reporting. Designed the data model and architecture independently using OOP principles.
+          </div>
+        </div>
+        <div class="proj-stack">
+          <span class="stack-tag">Java</span>
+          <span class="stack-tag">OOP</span>
+          <span class="stack-tag">UNISUL A3</span>
+        </div>
+      </div>
+
+      <div class="proj-row">
+        <div>
+          <div class="proj-title">CS50 — Exercises & Final Project</div>
+          <div class="proj-desc"
+               data-en="Harvard's CS50 coursework covering algorithms, memory management, data structures and web fundamentals. Final project hosted on GitHub."
+               data-pt="Curso CS50 de Harvard cobrindo algoritmos, gerenciamento de memória, estruturas de dados e fundamentos web. Projeto final hospedado no GitHub.">
+            Harvard's CS50 coursework covering algorithms, memory management, data structures and web fundamentals. Final project hosted on GitHub.
+          </div>
+        </div>
+        <div class="proj-stack">
+          <span class="stack-tag">C</span>
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">Harvard / edX</span>
+        </div>
+      </div>
+
+      <div class="proj-row">
+        <div>
+          <div class="proj-title">Full-Stack Projects — Alura</div>
+          <div class="proj-desc"
+               data-en="End-to-end applications following industry best practices, from front-end interactivity to backend scripting."
+               data-pt="Aplicações completas seguindo boas práticas do mercado, da interatividade no front-end à lógica de back-end.">
+            End-to-end applications following industry best practices, from front-end interactivity to backend scripting.
+          </div>
+        </div>
+        <div class="proj-stack">
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">JavaScript</span>
+          <span class="stack-tag">Full-Stack</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="reveal"/>
+
+  <!-- EDUCATION ────────────────────── -->
+  <section id="education" class="reveal">
+    <p class="label" data-en="Education" data-pt="Educação">Education</p>
+    <div class="timeline stagger-children">
+
+      <div class="tl-row">
+        <div class="tl-date">Aug 2026 →</div>
+        <div>
+          <div class="tl-title" data-en="B.Sc. Applied Computer Science"  data-pt="Bacharelado em Ciência da Computação Aplicada">B.Sc. Applied Computer Science</div>
+          <div class="tl-org">Saxion University · Enschede, Netherlands</div>
+          <p class="tl-note" data-en="EU citizen · No visa required · Relocating August 2026" data-pt="Cidadão da UE · Sem visto · Mudança em agosto de 2026">EU citizen · No visa required · Relocating August 2026</p>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-date">Feb 2026 →</div>
+        <div>
+          <div class="tl-title" data-en="B.Sc. Computer Science"          data-pt="Bacharelado em Ciência da Computação">B.Sc. Computer Science</div>
+          <div class="tl-org">UNISUL · Florianópolis, Brazil</div>
+          <p class="tl-note" data-en="GPA equiv. 9.0 · Determination Award" data-pt="Nota equiv. 9.0 · Prêmio Determinação">GPA equiv. 9.0 · Determination Award</p>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-date">2022 – 2024</div>
+        <div>
+          <div class="tl-title" data-en="High School Diploma"              data-pt="Ensino Médio">High School Diploma</div>
+          <div class="tl-org">Gaia Course & College</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="label" style="margin-top:2.25rem;" data-en="Certifications" data-pt="Certificações">Certifications</p>
+    <div class="timeline stagger-children">
+
+      <div class="tl-row">
+        <div class="tl-date">2025 →</div>
+        <div>
+          <div class="tl-title">CS50: Introduction to Computer Science</div>
+          <div class="tl-org" data-en="Harvard University / edX · In progress" data-pt="Harvard University / edX · Em andamento">Harvard University / edX · In progress</div>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-date">2024</div>
+        <div>
+          <div class="tl-title" data-en="Python, Java & JavaScript Development" data-pt="Desenvolvimento Python, Java & JavaScript">Python, Java & JavaScript Development</div>
+          <div class="tl-org">Alura</div>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-date">2024</div>
+        <div>
+          <div class="tl-title" data-en="Virtual Work Experience" data-pt="Experiência de Trabalho Virtual">Virtual Work Experience</div>
+          <div class="tl-org">Springpod</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="reveal"/>
+
+  <!-- LANGUAGES ────────────────────── -->
+  <section id="languages" class="reveal">
+    <p class="label" data-en="Languages" data-pt="Idiomas">Languages</p>
+    <div class="lang-grid">
+      <div class="lang-row"><span class="lang-name" data-en="Portuguese" data-pt="Português">Portuguese</span><span class="lang-level" data-en="Native" data-pt="Nativo">Native</span></div>
+      <div class="lang-row"><span class="lang-name">English</span><span class="lang-level">C1 · TOEFL 2026</span></div>
+      <div class="lang-row"><span class="lang-name">Spanish</span><span class="lang-level" data-en="A2 · Elementary" data-pt="A2 · Elementar">A2 · Elementary</span></div>
+      <div class="lang-row"><span class="lang-name">Dutch</span><span class="lang-level" data-en="Beginner · Studying" data-pt="Iniciante · Estudando">Beginner · Studying</span></div>
+    </div>
+  </section>
+
+  <hr class="reveal"/>
+
+  <!-- CONTACT ──────────────────────── -->
+  <section id="contact" class="reveal">
+    <p class="label" data-en="Contact" data-pt="Contato">Contact</p>
+    <div class="contact-grid">
+      <a class="contact-item" href="mailto:arthurdacorregio@gmail.com">
+        <span class="contact-type" data-en="Email"  data-pt="Email">Email</span>
+        <span class="contact-val">arthurdacorregio@gmail.com</span>
+      </a>
+      <a class="contact-item" href="https://github.com/tutuba48" target="_blank">
+        <span class="contact-type">GitHub</span>
+        <span class="contact-val">github.com/tutuba48</span>
+      </a>
+      <a class="contact-item" href="https://linkedin.com/in/arthur-dacorregio-silva" target="_blank">
+        <span class="contact-type">LinkedIn</span>
+        <span class="contact-val">arthur-dacorregio-silva</span>
+      </a>
+      <a class="contact-item" href="tel:+5548996708955">
+        <span class="contact-type" data-en="Phone" data-pt="Telefone">Phone</span>
+        <span class="contact-val">+55 (48) 99670-8955</span>
+      </a>
+    </div>
+  </section>
+
+  <hr class="reveal" style="margin-bottom:2.5rem;"/>
+
+  <!-- DOWNLOAD ─────────────────────── -->
+  <div id="download" class="download-block reveal">
+    <div>
+      <h3 data-en="Full CV available"                                                      data-pt="CV completo disponível">Full CV available</h3>
+      <p  data-en="PDF version — updated and ready for recruiters in Brazil &amp; Europe." data-pt="Versão em PDF — atualizada e pronta para recrutadores no Brasil e na Europa.">PDF version — updated and ready for recruiters in Brazil &amp; Europe.</p>
+    </div>
+    <a href="#" download="Arthur_Dacorregio_CV.pdf" class="link-btn link-primary" data-en="Download PDF ↓" data-pt="Baixar PDF ↓">Download PDF ↓</a>
+  </div>
+
+</main>
+
+
+<script>
+/* ════════════════════════════════════════════════════
+   1. SCROLL PROGRESS BAR
+════════════════════════════════════════════════════ */
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total    = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (scrolled / total * 100) + '%';
+}, { passive: true });
+
+
+/* ════════════════════════════════════════════════════
+   2. INTERSECTION OBSERVER — scroll reveal
+════════════════════════════════════════════════════ */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .stagger-children').forEach(el => revealObs.observe(el));
+
+
+/* ════════════════════════════════════════════════════
+   3. TYPEWRITER — section labels
+════════════════════════════════════════════════════ */
+function typewriter(el) {
+  const fullText = el.textContent.trim();
+  el.textContent = '';
+  el.classList.add('typing');
+  let i = 0;
+  const interval = setInterval(() => {
+    el.textContent += fullText[i];
+    i++;
+    if (i >= fullText.length) {
+      clearInterval(interval);
+      el.classList.remove('typing');
+    }
+  }, 38);
+}
+
+const labelObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      typewriter(e.target);
+      labelObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.8 });
+
+document.querySelectorAll('.label').forEach(el => labelObs.observe(el));
+
+
+/* ════════════════════════════════════════════════════
+   4. SKILL TAGS CASCADE
+════════════════════════════════════════════════════ */
+const skillsSection = document.getElementById('skills');
+const skillTags     = skillsSection ? skillsSection.querySelectorAll('.skill-item') : [];
+
+const skillsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      skillTags.forEach((tag, i) => {
+        setTimeout(() => tag.classList.add('visible'), i * 80);
+      });
+      skillsObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+if (skillsSection) skillsObs.observe(skillsSection);
+
+
+/* ════════════════════════════════════════════════════
+   5. ACTIVE NAV LINK ON SCROLL
+════════════════════════════════════════════════════ */
+const sections = document.querySelectorAll('section[id], div[id]');
+const navLinks  = document.querySelectorAll('.topbar-nav a');
+
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    navLinks.forEach(a => a.classList.remove('active'));
+    const a = document.querySelector(`.topbar-nav a[href="#${e.target.id}"]`);
+    if (a) a.classList.add('active');
+  });
+}, { threshold: 0.45 });
+
+sections.forEach(s => navObs.observe(s));
+
+
+/* ════════════════════════════════════════════════════
+   6. LANGUAGE SWITCHER
+════════════════════════════════════════════════════ */
+function setLang(lang) {
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-en][data-pt]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (val !== null) el.textContent = val;
+  });
+
+  /* Re-handle the download paragraph (has &amp;) */
+  const dlP = document.querySelector('.download-block p[data-en]');
+  if (dlP) {
+    if (lang === 'en') dlP.innerHTML = 'PDF version — updated and ready for recruiters in Brazil &amp; Europe.';
+    else               dlP.innerHTML = 'Versão em PDF — atualizada e pronta para recrutadores no Brasil e na Europa.';
+  }
+}
+</script>
+</body>
+</html>
